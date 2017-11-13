@@ -1,4 +1,4 @@
-# sever-computing-homework
+# server-computing-homework
 ## selpg, in go [要求详情](https://www.ibm.com/developerworks/cn/linux/shell/clutil/index.html)
 ### 说明
 1. selpg : 一个类似于cat命令的指令
