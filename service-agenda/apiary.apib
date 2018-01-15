@@ -1,0 +1,322 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# serviceagenda
+
+Service Agenda is a simple API allowing users to magage their agendas.
+
+
+# Group User
+
+Resource operations related to a user in the API.
+    
+## User  [/v1/user]
+
+get a security key for operations later
+    
+### User Login [GET /v1/user/login{?username,password}]
+    
++ Parameters
+    - username : `user1` (string, required)
+    - password : `pass1` (string, required)
+
++ Response 200 (application/json)
+
+    + Headers
+        
+            Set-Cookie: key=3w4e5r6tyuifcgvhbjnkmlvg
+    
+    + Body
+    
+            {
+                "message": "get key successfully"
+            }
+
+
++ Response 400 (application/json)
+
+        {
+            "message": "empty username or password"
+        }
+
+
++ Response 401 (application/json)
+
+        {
+            "message": "incorrect username or password"
+        }
+
+
++ Response 500 (application/json)
+
+        {
+            "message": "server error"
+        }
+
+
+
+### User Logout [DELETE /v1/user/logout/{id}]
+
++ Request
+
+    + Headers
+        
+            Cookie: key=3w4e5r6tyuifcgvhbjnkmlvg
+    
+    + Parameters
+        - id : 1 (int, required)
+
++ Response 204 
+
++ Response 400 (application/json)
+
+        {
+            "message": "invalid user id"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "message": "log out fail"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "message": "server error"
+        }
+
+# Group Users
+
+Resources related to users in the API.
+
+## Users Collection [/v1/users]
+
+### List all Users [GET /v1/users{?limit,offset}]
+
++ Request 
+
+    + Headers
+        
+            Cookie: key=3w4e5r6tyuifcgvhbjnkmlvg
+        
+    + Parameters
+        - limit : 2 (optional,int) - Defalut 5
+        - offset : 1 (optional,int) - Defalut 0
+
++ Response 200 (application/json)
+
+        {
+            "Message":"get userlist successfully",
+            "SingleUserInfoList":[
+                {
+                    "id":2,
+                    "username":"zhang3",
+                    "phone":"12345678902",
+                    "email":"zhang3@mail2.sysu.edu.cn"
+                },{
+                    "id":3,
+                    "username":"li4",
+                    "phone":"12345678901",
+                    "email":"li4@mail2.sysu.edu.cn"
+                }
+            ]
+        }
+        
+
++ Response 400 (application/json)
+
+        {
+            "message": "invalid limit",
+            "SimgleUserInfoList":[]
+        }
+
+
++ Response 401 (application/json)
+
+        {
+            "message": "invalid key",
+            "SimgleUserInfoList":[]
+        }
+
+
++ Response 500 (application/json)
+
+        {
+            "message": "server error",
+            "SimgleUserInfoList":[]
+        }
+
+
+### Create a New User [POST /v1/users]
+
++ Request (application/json)
+
+        {
+            "username":"zhang3",
+            "phone":"12345678901",
+            "password":"drfghjkfghjk",
+            "email":"zhang3@mail2.sysu.edu.cn",
+        }
+
++ Response 201 (application/json)
+
+        {
+            "message": "create user successfully",
+            "id" : -1,
+            "username":"zhang3",
+            "phone":"12345678901",
+            "email":"zhang3@mail2.sysu.edu.cn",
+        }
+            
++ Response 400 (application/json)
+
+        {
+            "message": "empty input or duplicate username",
+            "id" : -1,
+            "username":"",
+            "phone":"",
+            "email":""
+        }
+
++ Response 500 (application/json)
+
+        {
+            "message": "server error",
+            "id" : -1,
+            "username":"",
+            "phone":"",
+            "email":""
+        }
+        
+
+### Get User by ID [GET /v1/users/{id}]
+
++ Request 
+
+    + Headers
+        
+            Cookie: key=3w4e5r6tyuifcgvhbjnkmlvg
+        
+    + Parameters
+        - id : `1` (int, required) 
+
++ Response 200 (application/json)
+
+        {
+            "message": "get user info successfully",
+            "id" : 1,
+            "username":"zhang3",
+            "phone":"12345678901",
+            "email":"zhang3@mail2.sysu.edu.cn"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "invalid id",
+            "id" : -1,
+            "username":"",
+            "phone":"",
+            "email":""
+        }
+
++ Response 401 (application/json)
+
+        {
+            "message": "invalid key",
+            "id" : -1,
+            "username":"",
+            "phone":"",
+            "email":""
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "message": "the user with id 1 not exists",
+            "id" : 1,
+            "username":"",
+            "phone":"",
+            "email":""
+        }
+        
++ Response 500 (application/json)
+
+        {
+            "message": "server error",
+            "id" : -1,
+            "username":"",
+            "phone":"",
+            "email":""
+        }
+
+### Delete a User [DELETE /v1/users/{id}{?password}]
+
++ Request 
+
+    + Headers
+        
+            Cookie: key=3w4e5r6tyuifcgvhbjnkmlvg
+    
+    + Parameters
+        - id : 1 (int, required)
+        - password : `pass` (string, required)
+
++ Response 204 
+
++ Response 400 (application/json)
+
+        {
+            "message": "empty password"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "message": "invalid key or incorrect password"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "message": "server error"
+        }
+
+### Update Password [PATCH /v1/users/{id}{?password,newpassword,confirmation}]
+
++ Request 
+
+    + Headers
+        
+            Cookie : key=3w4e5r6tyuifcgvhbjnkmlvg
+            
+    + Parameters
+        - id : 1 (int, required) - user id
+        - password : `dfgh1` (string, required) - old password
+        - newpassword : `fguhi1` (string, required) - new password
+        - confirmation : `fguhi1` (string, required) - new password comfirmation
+
++ Response 200 (application/json)
+
+        {
+            "message": "update password successfully"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "new password is empty"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "message": "invalid key"
+        }
+        
++ Response 500 (application/json)
+
+        {
+            "message": "server error"
+        }
